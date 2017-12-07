@@ -129,6 +129,16 @@ AdvancePosition (Ptr<Node> node)
   Simulator::Schedule (Seconds (1.0), &AdvancePosition, node);
 }
 
+//static void
+//FlyPosition (Ptr<Node> node)
+//{
+//  Vector pos = GetPosition (node);
+//  pos.x = 240.0;
+//  pos.y = 240.0;
+//
+//  SetPosition (node, pos);
+//}
+
 void
 ChangeDefautGateway (Ptr<Node> node, Ipv4Address gateway, uint32_t interface)
 {
@@ -702,8 +712,11 @@ main (int argc, char *argv[])
   wifiMac.SetType(
 		  "ns3::ApWifiMac",		// Non-Qos Access Point Type
 		  "Ssid", SsidValue(ssid), "BeaconGeneration", BooleanValue(true),
-		  "BeaconInterval", TimeValue(Seconds(2)));
-
+		  "BeaconInterval", TimeValue(Seconds(0.1)),
+		  "EnableBeaconJitter", BooleanValue(true)
+  );
+  // Mofidy above atribute to change Beacon Interval. Now set as 0.6, namely 600 ms.
+  // Compile and execute
   NetDeviceContainer xTRDev1, xTRDev2;
   xTRDev1 = wifi.Install (wifiPhy, wifiMac, xTR1);
   xTRDev2 = wifi.Install (wifiPhy, wifiMac, xTR2);
@@ -791,7 +804,7 @@ main (int argc, char *argv[])
   Ptr<ListPositionAllocator> positionAlloc =
       CreateObject<ListPositionAllocator> ();
   positionAlloc->Add (Vector (0.0, 110.0, 0.0)); // position MN
-  positionAlloc->Add (Vector (110, 0.0, 0.0)); // position MN
+//  positionAlloc->Add (Vector (110, 0.0, 0.0)); // position MN
   positionAlloc->Add (Vector (0.0, 120.0, 0.0)); // position xTR1
   positionAlloc->Add (Vector (120.0, 0.0, 0.0)); // position xTR2
   positionAlloc->Add (Vector (180, 180.0, 0.0)); // position xTR3
@@ -804,9 +817,11 @@ main (int argc, char *argv[])
   PrintLocations (c, "Location of all nodes");
 
   Simulator::Schedule(Seconds(10), &AdvancePosition, mn.Get(0));
+//  Simulator::Schedule(Seconds(20), &FlyPosition, xTR1.Get(0));
 
-  Time END_T = Seconds (40.0);
-  Time ECO_END_T = Seconds (40.0);
+
+  Time END_T = Seconds (45.5);
+  Time ECO_END_T = Seconds (45.5);
   Time START_T = Seconds (1.0);
 
   /*
@@ -843,11 +858,13 @@ main (int argc, char *argv[])
   NodeContainer lispRouters = NodeContainer (c.Get(0), c.Get (1), c.Get (3), c.Get(6), c.Get(7));
   lispRouters.Add(c.Get(2));
   NodeContainer xTRNodes = NodeContainer(c.Get(0), c.Get (1), c.Get (2), c.Get (3));
+//  NodeContainer xTRNodes2 = NodeContainer();
   // MR/MS are also lisp-speaking devices => install lisp but no xTR app. Instead mr/ms app.
   InstallLispRouter (lispRouters);
   // Install xTR apps on xTR nodes.
   InstallXtrApplication(xTRNodes, mrAddr, msAddr, Seconds (0.0), END_T);
-
+  // Stop xTR1 at 20s.
+//  InstallXtrApplication(xTRNodes2, mrAddr, msAddr, Seconds (0.0), Seconds(10.0));
   // Install Map Resolver at node 6
   InstallMapResolverApplication (c.Get (6), msAddr, Seconds (0.0), END_T);
   // Install lisp Mapping server at node 7
