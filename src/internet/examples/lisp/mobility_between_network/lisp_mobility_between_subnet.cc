@@ -14,6 +14,7 @@
 #include <string>
 #include <cassert>
 
+#include "ns3/system-path.h"
 #include "ns3/netanim-module.h"
 #include "ns3/core-module.h"
 #include "ns3/network-module.h"
@@ -328,13 +329,34 @@ InstallLispRouter (NodeContainer nodes)
    * Take map resolver @ip as input parameter
    */
   // finally install lisp
+	std::string curExeBinPath = SystemPath::FindSelfDirectory();
+	std::list<std::string> curExeBinPathList = SystemPath::Split(curExeBinPath);
+	curExeBinPathList.remove("build");
+	curExeBinPath = SystemPath::Join(curExeBinPathList.begin(), curExeBinPathList.end());
+  NS_LOG_WARN("Current executable binary path:"<<curExeBinPath);
+  std::list<std::string> rlocFilePath =  {"lisp", "mobility_between_network", "rlocs.txt"};
+  std::list<std::string> rlocXmlPath =  {"lisp", "mobility_between_network", "rloc_config_xml.txt"};
+
+  std::string rlocFP = SystemPath::Append(
+		  curExeBinPath,
+			SystemPath::Join(
+					rlocFilePath.begin(),
+					rlocFilePath.end()
+			)
+);
+  NS_LOG_WARN("RLOC list file path:"<<rlocFP);
   NS_LOG_INFO("Install Lisp");
   LispHelper lispHelper;
-  lispHelper.BuildRlocsSet (
-      "/home/qsong/Documents/ns-3.24/src/internet/examples/lisp/mobility_between_network/rlocs.txt");
-  lispHelper.Install (nodes);
-  lispHelper.BuildMapTables2 (
-      "/home/qsong/Documents/ns-3.24/src/internet/examples/lisp/mobility_between_network/rloc_config_xml.txt");
+  lispHelper.BuildRlocsSet(rlocFP);
+	lispHelper.Install (nodes);
+	std::string rlocXmlFP = SystemPath::Append(
+			curExeBinPath,
+			SystemPath::Join(
+					rlocXmlPath.begin(),
+					rlocXmlPath.end()
+			)
+	);
+	lispHelper.BuildMapTables2 (rlocXmlFP);
   lispHelper.InstallMapTables (nodes);
   NS_LOG_WARN("Example: Lisp is successfully aggregated");
 }

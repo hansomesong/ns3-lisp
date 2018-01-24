@@ -314,9 +314,17 @@ namespace ns3
 	if (msg_type == MapRequestMsg::GetMsgType ())
 	  {
 	    Ptr<MapRequestMsg> requestMsg = MapRequestMsg::Deserialize (buf);
-
-	    Ptr<Packet> reactedPacket; //  Maybe a normal map reply or an invoked-SMR, or a map reply to the former
-	    // No matter to react to a SMR or normal map request message, the destination RLOC is the same.
+	    Ptr<Packet> reactedPacket;
+	    /**
+	     * After reception of a map request, the possible reactions:
+	     * 1) A conventional map reply
+	     * 2) An invoked-SMR
+	     * 3) A map reply to an invoked-SMR
+	     * No matter to react to a SMR or normal map request message, the destination RLOC is the same.
+	     * Update: 2018-01-24, In case of reception of a SMR, perhaps it is better to send an
+	     * invoked-SMR to map resolver/map server. Because in case of double encapsulation issue in
+	     * LISP-MN, the first invoked-SMR will be surely failed.
+	     */
 	    if (requestMsg->GetItrRlocAddrIp ()
 		!= static_cast<Address> (Ipv4Address ()))
 	      MapResolver::ConnectToPeerAddress (
@@ -440,19 +448,25 @@ namespace ns3
 	  }
 	else if (msg_type == static_cast<uint8_t> (LispControlMsg::MAP_NOTIFY))
 	  {
-	    //TODO: If supporting SMR, we should call SMR here!
-	    // As a first step, we can send map request to all RLOCs in the cache...
-	    // Maybe it's better to have a flag for mapTablesChanged. Only it is true,
-	    // SMR procedure will be triggered. In addition, we also need a mechanism to
-	    // quickly check whether database is changed (Map versioning???)
+	    /**
+	     * After reception of Map notify message, two possible reactions:
+	     * 1) In traditional LISP, no reaction after Map registration procedure
+	     * 2) In LISP-MN mode, if supporting SMR, a SMR message should be sent out!
+	     * As a first step, we choose to send map request to all RLOCs in the cache.
+	     * Maybe it's better to have a flag for mapTablesChanged. Only it is true,
+	     * SMR procedure will be triggered. In addition, we also need a mechanism to
+	     * quickly check whether database is changed (Map versioning???)
+	     */
 	    if (m_mapTablesV4->GetNMapEntriesLispCache () != 0
 		or m_mapTablesV6->GetNMapEntriesLispCache () != 0)
 	      {
 		NS_LOG_DEBUG(
 		    "Receive a map notify message. xTR's Cache is not empty. Trigger SMR procedure for every entry in Cache...");
 		LispEtrItrApplication::SendSmrMsg ();
-		// After sendng SMR, don't forget to schedule a resend event for SMR
-		// Since for double encapsulation case, surely the first trial will be failed.
+		/**
+		 * After sendng SMR, don't forget to schedule a resend event for SMR
+		 * Since for double encapsulation case, surely the first trial will be failed.
+		 */
 		m_resendSmrEvent = Simulator::Schedule(Seconds(2.0),&LispEtrItrApplication::SendSmrMsg, this);
 		m_recvIvkSmr = false;
 	      }
