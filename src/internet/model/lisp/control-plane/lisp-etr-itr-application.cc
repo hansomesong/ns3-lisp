@@ -379,9 +379,17 @@ namespace ns3
 		reactedPacket = Create<Packet> (newBuf, 256);
 		// IMPORTANT: set invoked-SMR bit as 1.
 		// TODO: Question: what about bit S? 1 or 0 ? or whatever?
+
+		/**
+		 * Update: 2018-01-24
+		 * In the past, the invoked-SMR is sent directly the xTR that initiates the received SMR
+		 * Now we send the invoked-SMR to map server/map resolver
+		 */
+		MapResolver::ConnectToPeerAddress (
+		    m_mapResolverRlocs.front ()->GetRlocAddress (),
+		    LispOverIp::LISP_SIG_PORT, m_socket);
 		Send (reactedPacket);
-		NS_LOG_DEBUG(
-		    "Invoked Map Request Message Sent to " << Ipv4Address::ConvertFrom (requestMsg->GetItrRlocAddrIp()));
+		NS_LOG_DEBUG("Invoked Map Request Message Sent to " << Ipv4Address::ConvertFrom (m_mapResolverRlocs.front()->GetRlocAddress ()));
 	      }
 	    else if (requestMsg->GetS () == 1 and requestMsg->GetS2() == 1)
 	      {
