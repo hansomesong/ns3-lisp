@@ -5,7 +5,7 @@
  *      Author: lionel
  */
 
-#include "map-tables.h"
+#include "ns3/map-tables.h"
 #include "ns3/log.h"
 
 namespace ns3
@@ -49,6 +49,7 @@ void MapTables::SetLispOverIp(Ptr<LispOverIp> lispProtocol)
 {
   m_lispProtocol = lispProtocol;
 }
+
 
 void MapTables::DbMiss (void)
 {

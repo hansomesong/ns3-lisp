@@ -17,12 +17,10 @@
  *
  * Author: Lionel Agbodjan <lionel.agbodjan@gmail.com>
  */
-
-#include "lisp-etr-itr-app-helper.h"
-#include "ns3/lisp-etr-itr-application.h"
+#include "ns3/lisp-etr-itr-app-helper.h"
 #include "ns3/uinteger.h"
 #include "ns3/names.h"
-#include "ns3/lisp-protocol.h"
+
 
 namespace ns3
 {
@@ -82,6 +80,12 @@ Ptr<Application> LispEtrItrAppHelper::InstallPriv (Ptr<Node> node) const
       app->AddMapResolverLoc (*it);
     }
   app->SetMapTables (lisp->GetMapTablesV4(), lisp->GetMapTablesV6());
+  /**
+   * Update:2018-01-27
+   * MapTable should also hold a pointer to the xTR application
+   */
+//  lisp->GetMapTablesV4()->SetxTRApp(app);
+//  lisp->GetMapTablesV6()->SetxTRApp(app);
   app->SetMapServerAddresses (m_mapServerAddresses);
   node->AddApplication (app);
   return app;

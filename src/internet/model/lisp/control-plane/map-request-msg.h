@@ -23,8 +23,8 @@
 #include "ns3/address.h"
 #include "ns3/lisp-control-msg.h"
 #include "ns3/ptr.h"
-#include "map-reply-record.h"
-#include "map-request-record.h"
+#include "ns3/map-reply-record.h"
+#include "ns3/map-request-record.h"
 
 namespace ns3
 {

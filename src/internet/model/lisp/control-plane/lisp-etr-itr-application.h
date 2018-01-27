@@ -26,6 +26,8 @@
 #include "ns3/traced-callback.h"
 #include "ns3/map-tables.h"
 #include "ns3/lisp-over-ip.h"
+#include "ns3/lisp-protocol.h"
+#include "ns3/lisp-over-ipv4.h"
 #include "ns3/map-request-msg.h"
 #include "ns3/map-reply-msg.h"
 #include "ns3/map-register-msg.h"
@@ -84,6 +86,19 @@ private:
    */
   void SendSmrMsg(void);
 
+  /**
+   * \brief After reception of a SMR by a xTR, send an invoked-SMR(i.e. Map Request Message with S and s bit set as 1)
+   * to the aforementioned xTR. This take the received SMR as the only input method
+   * and returns nothing.
+   */
+  void SendInvokedSmrMsg(Ptr<MapRequestMsg> smr);
+
+
+  /**
+   * \brief Send a map request message
+   */
+  void SendMapRequest(Ptr<MapRequestMsg> mapRequestMsg);
+
 //protected:
   /**
    * \brief Schedule the next packet transmission
@@ -141,6 +156,11 @@ private:
   Ptr<MapTables> m_mapTablesV4;
   Ptr<MapTables> m_mapTablesV6;
   std::list<Ptr<Locator> > m_mapResolverRlocs;
+  // Save SMR before that xTR find the RLOC of the LISP-MN node
+  // Upon reception of map reply, check immediately whether can send the saved
+  // message. We use simple list data structure. Of course, we can use more
+  // efficiency data structure in the future.
+  std::list<Ptr<MapRequestMsg>> m_mapReqMsg;
 
   Ptr<Socket> m_lispMappingSocket;
   Ptr<Socket> m_socket;

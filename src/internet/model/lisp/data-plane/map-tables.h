@@ -8,16 +8,26 @@
 #ifndef MAPTABLES_H_
 #define MAPTABLES_H_
 
+//#include "ns3/lisp-etr-itr-application.h"
+#include "ns3/lisp-over-ip.h"
 #include "ns3/packet.h"
-#include "locators.h" //it included lisp-protcol.h
-#include "ns3/ptr.h"
+#include "ns3/locators.h" //it included lisp-protcol.h
+//#include "ns3/ptr.h"
 #include "ns3/simple-ref-count.h"
-//#include "lisp-protocol.h"
-#include "lisp-over-ip.h"
-#include "map-entry.h"
+#include "ns3/map-entry.h"
+
+
 
 namespace ns3
 {
+/**
+ * We encounter a cyclic reference situation between xTR application and map table here.
+ * We use forward declaration to break the cycle.
+ * Note that we have no include directive for xTR application header file.
+ */
+//class LispEtrItrApplication;
+//class LispHeader;
+//class LispOverIp;
 
 class MapTables : public Object
 {
@@ -80,13 +90,28 @@ public:
   Ptr<LispOverIp> GetLispOverIp (void);
   void SetLispOverIp (Ptr<LispOverIp> lispProtocol);
 
+  /**
+   * About how a derived class of the current class acesses an attribute of the base class:
+   * http://www.cplusplus.com/forum/general/5323/
+   * Another possibility is to use virtual function (i.e. polymorphism)
+   * http://www.cplusplus.com/doc/tutorial/polymorphism/
+   * In its dervied class, no need to declare the following two methods again.
+   */
+//  virtual Ptr<LispEtrItrApplication> GetxTRApp()=0;
+//  virtual void SetxTRApp(Ptr<LispEtrItrApplication> xTRApp)=0;
+
   void DbMiss (void);
   void DbHit (void);
   void CacheHit (void);
   void CacheMiss (void);
 
+//protected:
+//  // Add this pointer so that when cache insertion event occurs, xTR application can trigger invoked-SMR send procedure
+//  Ptr<LispEtrItrApplication> m_xTRApp;
+
 private:
   Ptr<LispOverIp> m_lispProtocol;
+
 
   uint32_t m_dbMiss;    // # failed lookups in db
   uint32_t m_dbHit;     // # successful lookups in db

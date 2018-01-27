@@ -153,6 +153,17 @@ Ptr<MapEntry> SimpleMapTables::CacheLookup(const Address &eidAddress) {
 	// TODO investigate lock and unlock
 }
 
+
+//Ptr<LispEtrItrApplication> SimpleMapTables::GetxTRApp(){
+//	// Attribute m_xTRApp is an attribute defined in its parent class, with
+//	// protected specifier.
+//	return m_xTRApp;
+//};
+//
+//void SimpleMapTables::SetxTRApp(Ptr<LispEtrItrApplication> xTRApp){
+//	m_xTRApp = xTRApp;
+//};
+
 // Set an ipv4 eid
 void SimpleMapTables::SetEntry(const Address &eidAddress, const Ipv4Mask &mask,
 		Ptr<MapEntry> mapEntry, MapEntryLocation location) {
@@ -200,6 +211,12 @@ void SimpleMapTables::SetEntry(const Address &eidAddress, const Ipv4Mask &mask,
 				std::pair<Ptr<EndpointId>, Ptr<MapEntry> >(eid, mapEntry));
 		m_mutexCache.Unlock();
 		NS_LOG_DEBUG("Set an Mapping Entry for EID:"<<eid->GetEidAddress());
+		//TODO: Here we should care about whether we could send the saved invoked-SMR
+		// if ...
+
+//		for(std::list<Ptr<MapRequestMsg>>::const_iterator it = m_mapReqMsg.begin(); it!=m_mapReqMsg.end();++it){
+//			//
+//		}
 	}
 }
 
