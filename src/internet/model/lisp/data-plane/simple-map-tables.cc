@@ -18,7 +18,7 @@
  * Author: Lionel Agbodjan <lionel.agbodjan@gmail.com>
  */
 
-#include "simple-map-tables.h"
+#include "ns3/simple-map-tables.h"
 
 #include "ns3/ptr.h"
 #include "ns3/ipv4.h"
@@ -37,7 +37,7 @@
 #include "ns3/socket.h"
 #include "ns3/ipv4-address.h"
 #include "ns3/ipv6-address.h"
-#include "lisp-header.h"
+#include "ns3/lisp-header.h"
 #include "ns3/assert.h"
 #include "ns3/log.h"
 

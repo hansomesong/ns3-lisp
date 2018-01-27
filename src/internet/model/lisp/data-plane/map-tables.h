@@ -59,7 +59,6 @@ public:
    */
   virtual void Print (std::ostream &os) const=0;
 
-
   enum MapEntryLocation {
     IN_DATABASE = 0,
     IN_CACHE = 1

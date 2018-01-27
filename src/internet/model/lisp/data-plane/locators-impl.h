@@ -11,8 +11,8 @@
 #include <list>
 #include <ns3/ptr.h>
 #include <ns3/address.h>
-#include "lisp-over-ip.h"
-#include "map-tables.h"
+#include "ns3/lisp-over-ip.h"
+#include "ns3/locators.h" //it includes locator.h
 
 namespace ns3 {
 

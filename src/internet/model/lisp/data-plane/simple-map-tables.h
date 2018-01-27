@@ -28,9 +28,10 @@
 #include <ns3/log.h>
 #include <ns3/system-mutex.h>
 
-//#include "lisp-protocol.h"
-//#include "map-tables.h"
+#include "ns3/lisp-protocol.h"
+#include "ns3/map-tables.h"
 #include "ns3/locators-impl.h"
+
 //#include "ns3/map-request-msg.h"
 //#include "ns3/application.h"
 
@@ -43,7 +44,7 @@ namespace ns3
 
 namespace ns3
 {
-	class LispEtrItrApplication;
+//	class LispEtrItrApplication;
   class Address;
 
   /**
