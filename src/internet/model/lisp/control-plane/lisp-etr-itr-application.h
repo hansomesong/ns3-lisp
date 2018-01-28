@@ -65,16 +65,6 @@ public:
 
   std::list<Ptr<MapRequestMsg>> GetMapRequestMsgList();
 
-
-
-private:
-
-  virtual void DoDispose (void);
-
-  virtual void StartApplication (void);
-
-  virtual void StopApplication (void);
-
   /**
    * \brief Send a packet
    */
@@ -140,8 +130,15 @@ private:
   Ptr<MapReplyMsg> GenerateMapReply4ChangedMapping (Ptr<MapRequestMsg> requestMsg);
 
 
-
   Address GetLocalAddress (Address address);
+
+private:
+
+  virtual void DoDispose (void);
+
+  virtual void StartApplication (void);
+
+  virtual void StopApplication (void);
 
   bool m_requestSent;
   bool m_recvIvkSmr;

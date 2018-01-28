@@ -84,8 +84,8 @@ Ptr<Application> LispEtrItrAppHelper::InstallPriv (Ptr<Node> node) const
    * Update:2018-01-27
    * MapTable should also hold a pointer to the xTR application
    */
-//  lisp->GetMapTablesV4()->SetxTRApp(app);
-//  lisp->GetMapTablesV6()->SetxTRApp(app);
+  lisp->GetMapTablesV4()->SetxTRApp(app);
+  lisp->GetMapTablesV6()->SetxTRApp(app);
   app->SetMapServerAddresses (m_mapServerAddresses);
   node->AddApplication (app);
   return app;

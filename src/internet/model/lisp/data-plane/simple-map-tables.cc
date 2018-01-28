@@ -211,12 +211,17 @@ void SimpleMapTables::SetEntry(const Address &eidAddress, const Ipv4Mask &mask,
 		NS_LOG_DEBUG("Set an Mapping Entry for EID:"<<eid->GetEidAddress());
 		//TODO: Here we should care about whether we could send the saved invoked-SMR
 		// if ...
-
-//		GetxTRApplication()->
-//		for(std::list<Ptr<MapRequestMsg>>::const_iterator it = m_mapReqMsg.begin(); it!=m_mapReqMsg.end();++it){
-//			//
-////			if it->Get
-//		}
+		std::list<Ptr<MapRequestMsg>> m_mapReqMsg = GetxTRApp()->GetMapRequestMsgList();
+		for(std::list<Ptr<MapRequestMsg>>::const_iterator it = m_mapReqMsg.begin(); it!=m_mapReqMsg.end();++it){
+			// it here is a pointer of pointer??
+			Ptr<MapRequestMsg> requestMsg = (*it);
+			if (eidAddress == requestMsg->GetItrRlocAddrIp()){
+				GetxTRApp()->SendInvokedSmrMsg(requestMsg);
+				NS_LOG_DEBUG("Now a buffered invoked-SMR has been sent... ");
+				//Don't forget to delete the sent invoked-SMR
+				m_mapReqMsg.remove(*it);
+			}
+		}
 	}
 }
 
