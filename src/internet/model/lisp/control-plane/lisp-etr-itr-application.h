@@ -31,7 +31,7 @@
 #include "ns3/map-request-msg.h"
 #include "ns3/map-reply-msg.h"
 #include "ns3/map-register-msg.h"
-#include "ns3/simple-map-tables.h"
+//#include "ns3/simple-map-tables.h"
 #include "ns3/mapping-socket-msg-header.h"
 #include "ns3/mapping-socket-msg.h"
 
@@ -145,9 +145,9 @@ private:
   bool m_requestSent;
   bool m_recvIvkSmr;
   EventId m_resendSmrEvent;                //!< Message refresh event
-  typedef std::map<Ptr<EndpointId>, Ptr<MapRequestMsg>, SimpleMapTables::CompareEndpointId> RequestPendingList_t;
+  typedef std::map<Ptr<EndpointId>, Ptr<MapRequestMsg>, MapTables::CompareEndpointId> RequestPendingList_t;
   RequestPendingList_t m_requestList;
-  typedef std::map<Ptr<EndpointId>, uint8_t, SimpleMapTables::CompareEndpointId> RequestPendingCounter;
+  typedef std::map<Ptr<EndpointId>, uint8_t, MapTables::CompareEndpointId> RequestPendingCounter;
   RequestPendingCounter m_requestCounter;
   // each etr is configure with the address of the map
   // server it must register to

@@ -133,94 +133,7 @@ namespace ns3
     GetMapEntryList (MapTables::MapEntryLocation location,
 		     std::list<Ptr<MapEntry> > &entryList);
 
-    struct CompareEndpointId
-    {
-      //TODO: If want to support Ipv6, should modify...
-      bool
-      operator() (const Ptr<EndpointId> a, const Ptr<EndpointId> b) const
-      {
-	if (a->IsIpv4 ())
-	  {
-	    if (b->GetIpv4Mask ().IsEqual (Ipv4Mask ()))
-	      {
-		if (Ipv4Address::ConvertFrom (a->GetEidAddress ()).CombineMask (
-		    a->GetIpv4Mask ()).Get ()
-		    > Ipv4Address::ConvertFrom (b->GetEidAddress ()).CombineMask (
-			a->GetIpv4Mask ()).Get ())
-		  return true;
-		else if (Ipv4Address::ConvertFrom (a->GetEidAddress ()).CombineMask (
-		    a->GetIpv4Mask ()).Get ()
-		    < Ipv4Address::ConvertFrom (b->GetEidAddress ()).CombineMask (
-			a->GetIpv4Mask ()).Get ())
-		  return false;
-	      }
-	    else if (a->GetIpv4Mask ().IsEqual (Ipv4Mask ()))
-	      {
-		return Ipv4Address::ConvertFrom (a->GetEidAddress ()).CombineMask (
-		    b->GetIpv4Mask ()).Get ()
-		    > Ipv4Address::ConvertFrom (b->GetEidAddress ()).CombineMask (
-			b->GetIpv4Mask ()).Get ();
-	      }
-	    else
-	      {
-		if (Ipv4Address::ConvertFrom (a->GetEidAddress ()).CombineMask (
-		    a->GetIpv4Mask ()).Get ()
-		    > Ipv4Address::ConvertFrom (b->GetEidAddress ()).CombineMask (
-			b->GetIpv4Mask ()).Get ())
-		  return true;
-		else if (Ipv4Address::ConvertFrom (a->GetEidAddress ()).CombineMask (
-		    a->GetIpv4Mask ()).Get ()
-		    < Ipv4Address::ConvertFrom (b->GetEidAddress ()).CombineMask (
-			b->GetIpv4Mask ()).Get ())
-		  return false;
-		else
-		  {
-		    return a->GetIpv4Mask ().GetPrefixLength ()
-			> b->GetIpv4Mask ().GetPrefixLength ();
-		  }
-	      }
-	  }
-	else
-	  {
-	    // TODO do the same for Ipv6
-	    if (b->GetIpv6Prefix ().IsEqual (Ipv6Prefix ()))
-	      {
-		return !(Ipv6Address::ConvertFrom (a->GetEidAddress ()).CombinePrefix (
-		    a->GetIpv6Prefix ())
-		    < Ipv6Address::ConvertFrom (b->GetEidAddress ()).CombinePrefix (
-			a->GetIpv6Prefix ()));
-	      }
-	    else if (a->GetIpv6Prefix ().IsEqual (Ipv6Prefix ()))
-	      return !(Ipv6Address::ConvertFrom (a->GetEidAddress ()).CombinePrefix (
-		  b->GetIpv6Prefix ())
-		  < Ipv6Address::ConvertFrom (b->GetEidAddress ()).CombinePrefix (
-		      b->GetIpv6Prefix ()));
-	    else
-	      {
-		if (Ipv6Address::ConvertFrom (a->GetEidAddress ()).CombinePrefix (
-		    a->GetIpv6Prefix ())
-		    < Ipv6Address::ConvertFrom (b->GetEidAddress ()).CombinePrefix (
-			b->GetIpv6Prefix ()))
-		  {
-		    return false;
-		  }
-		else if (Ipv6Address::ConvertFrom (b->GetEidAddress ()).CombinePrefix (
-		    b->GetIpv6Prefix ())
-		    < Ipv6Address::ConvertFrom (a->GetEidAddress ()).CombinePrefix (
-			a->GetIpv6Prefix ()))
-		  {
-		    return true;
-		  }
-		else
-		  {
-		    return a->GetIpv6Prefix ().GetPrefixLength ()
-			> b->GetIpv6Prefix ().GetPrefixLength ();
-		  }
-	      }
-	  }
-	return false;
-      }
-    };
+
   private:
     void
     InsertLocator (const Address &eid, const Ipv4Mask &mask,
@@ -232,6 +145,7 @@ namespace ns3
     SystemMutex m_mutexDatabase;
     std::map<Ptr<EndpointId>, Ptr<MapEntry>, CompareEndpointId> m_mappingCache;
     std::map<Ptr<EndpointId>, Ptr<MapEntry>, CompareEndpointId> m_mappingDatabase;
+//    Ptr<LispEtrItrApplication> m_xTRApp;
 
 
 

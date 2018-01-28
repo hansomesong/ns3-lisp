@@ -25,9 +25,9 @@ namespace ns3
  * We use forward declaration to break the cycle.
  * Note that we have no include directive for xTR application header file.
  */
-//class LispEtrItrApplication;
-//class LispHeader;
-//class LispOverIp;
+class LispEtrItrApplication;
+class LispHeader;
+class LispOverIp;
 
 class MapTables : public Object
 {
@@ -103,6 +103,95 @@ public:
   void DbHit (void);
   void CacheHit (void);
   void CacheMiss (void);
+
+  struct CompareEndpointId
+   {
+     //TODO: If want to support Ipv6, should modify...
+     bool
+     operator() (const Ptr<EndpointId> a, const Ptr<EndpointId> b) const
+     {
+	if (a->IsIpv4 ())
+	  {
+	    if (b->GetIpv4Mask ().IsEqual (Ipv4Mask ()))
+	      {
+		if (Ipv4Address::ConvertFrom (a->GetEidAddress ()).CombineMask (
+		    a->GetIpv4Mask ()).Get ()
+		    > Ipv4Address::ConvertFrom (b->GetEidAddress ()).CombineMask (
+			a->GetIpv4Mask ()).Get ())
+		  return true;
+		else if (Ipv4Address::ConvertFrom (a->GetEidAddress ()).CombineMask (
+		    a->GetIpv4Mask ()).Get ()
+		    < Ipv4Address::ConvertFrom (b->GetEidAddress ()).CombineMask (
+			a->GetIpv4Mask ()).Get ())
+		  return false;
+	      }
+	    else if (a->GetIpv4Mask ().IsEqual (Ipv4Mask ()))
+	      {
+		return Ipv4Address::ConvertFrom (a->GetEidAddress ()).CombineMask (
+		    b->GetIpv4Mask ()).Get ()
+		    > Ipv4Address::ConvertFrom (b->GetEidAddress ()).CombineMask (
+			b->GetIpv4Mask ()).Get ();
+	      }
+	    else
+	      {
+		if (Ipv4Address::ConvertFrom (a->GetEidAddress ()).CombineMask (
+		    a->GetIpv4Mask ()).Get ()
+		    > Ipv4Address::ConvertFrom (b->GetEidAddress ()).CombineMask (
+			b->GetIpv4Mask ()).Get ())
+		  return true;
+		else if (Ipv4Address::ConvertFrom (a->GetEidAddress ()).CombineMask (
+		    a->GetIpv4Mask ()).Get ()
+		    < Ipv4Address::ConvertFrom (b->GetEidAddress ()).CombineMask (
+			b->GetIpv4Mask ()).Get ())
+		  return false;
+		else
+		  {
+		    return a->GetIpv4Mask ().GetPrefixLength ()
+			> b->GetIpv4Mask ().GetPrefixLength ();
+		  }
+	      }
+	  }
+	else
+	  {
+	    // TODO do the same for Ipv6
+	    if (b->GetIpv6Prefix ().IsEqual (Ipv6Prefix ()))
+	      {
+		return !(Ipv6Address::ConvertFrom (a->GetEidAddress ()).CombinePrefix (
+		    a->GetIpv6Prefix ())
+		    < Ipv6Address::ConvertFrom (b->GetEidAddress ()).CombinePrefix (
+			a->GetIpv6Prefix ()));
+	      }
+	    else if (a->GetIpv6Prefix ().IsEqual (Ipv6Prefix ()))
+	      return !(Ipv6Address::ConvertFrom (a->GetEidAddress ()).CombinePrefix (
+		  b->GetIpv6Prefix ())
+		  < Ipv6Address::ConvertFrom (b->GetEidAddress ()).CombinePrefix (
+		      b->GetIpv6Prefix ()));
+	    else
+	      {
+		if (Ipv6Address::ConvertFrom (a->GetEidAddress ()).CombinePrefix (
+		    a->GetIpv6Prefix ())
+		    < Ipv6Address::ConvertFrom (b->GetEidAddress ()).CombinePrefix (
+			b->GetIpv6Prefix ()))
+		  {
+		    return false;
+		  }
+		else if (Ipv6Address::ConvertFrom (b->GetEidAddress ()).CombinePrefix (
+		    b->GetIpv6Prefix ())
+		    < Ipv6Address::ConvertFrom (a->GetEidAddress ()).CombinePrefix (
+			a->GetIpv6Prefix ()))
+		  {
+		    return true;
+		  }
+		else
+		  {
+		    return a->GetIpv6Prefix ().GetPrefixLength ()
+			> b->GetIpv6Prefix ().GetPrefixLength ();
+		  }
+	      }
+	  }
+	return false;
+     }
+   };
 
 //protected:
 //  // Add this pointer so that when cache insertion event occurs, xTR application can trigger invoked-SMR send procedure

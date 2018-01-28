@@ -155,8 +155,6 @@ Ptr<MapEntry> SimpleMapTables::CacheLookup(const Address &eidAddress) {
 
 
 //Ptr<LispEtrItrApplication> SimpleMapTables::GetxTRApp(){
-//	// Attribute m_xTRApp is an attribute defined in its parent class, with
-//	// protected specifier.
 //	return m_xTRApp;
 //};
 //
