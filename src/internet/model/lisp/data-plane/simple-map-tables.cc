@@ -154,13 +154,13 @@ Ptr<MapEntry> SimpleMapTables::CacheLookup(const Address &eidAddress) {
 }
 
 
-//Ptr<LispEtrItrApplication> SimpleMapTables::GetxTRApp(){
-//	return m_xTRApp;
-//};
-//
-//void SimpleMapTables::SetxTRApp(Ptr<LispEtrItrApplication> xTRApp){
-//	m_xTRApp = xTRApp;
-//};
+Ptr<LispEtrItrApplication> SimpleMapTables::GetxTRApp(){
+	return m_xTRApp;
+};
+
+void SimpleMapTables::SetxTRApp(Ptr<LispEtrItrApplication> xTRApp){
+	m_xTRApp = xTRApp;
+};
 
 // Set an ipv4 eid
 void SimpleMapTables::SetEntry(const Address &eidAddress, const Ipv4Mask &mask,
@@ -212,8 +212,10 @@ void SimpleMapTables::SetEntry(const Address &eidAddress, const Ipv4Mask &mask,
 		//TODO: Here we should care about whether we could send the saved invoked-SMR
 		// if ...
 
+//		GetxTRApplication()->
 //		for(std::list<Ptr<MapRequestMsg>>::const_iterator it = m_mapReqMsg.begin(); it!=m_mapReqMsg.end();++it){
 //			//
+////			if it->Get
 //		}
 	}
 }

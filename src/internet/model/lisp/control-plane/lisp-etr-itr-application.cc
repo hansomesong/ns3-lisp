@@ -613,6 +613,11 @@ void LispEtrItrApplication::HandleMapSockRead(Ptr<Socket> lispMappingSocket) {
 	}
 }
 
+std::list<Ptr<MapRequestMsg>> LispEtrItrApplication::GetMapRequestMsgList(){
+
+	return m_mapReqMsg;
+}
+
 MappingSocketMsgHeader LispEtrItrApplication::GenerateMapSocketAddMsgHeader(
 		Ptr<MapReplyMsg> replyMsg) {
 	MappingSocketMsgHeader mapSockHeader;

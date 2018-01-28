@@ -32,8 +32,8 @@
 #include "ns3/map-tables.h"
 #include "ns3/locators-impl.h"
 
-//#include "ns3/map-request-msg.h"
-//#include "ns3/application.h"
+#include "ns3/map-request-msg.h"
+#include "ns3/lisp-etr-itr-application.h"
 
 
 namespace ns3
@@ -98,8 +98,8 @@ namespace ns3
 	      Ptr<MapEntry> mapEntry, MapEntryLocation location);
 
 
-//    Ptr<LispEtrItrApplication> GetxTRApp();
-//    void SetxTRApp(Ptr<LispEtrItrApplication> xTRApp);
+    Ptr<LispEtrItrApplication> GetxTRApp();
+    void SetxTRApp(Ptr<LispEtrItrApplication> xTRApp);
 
     // Insert Locator
     void
@@ -145,7 +145,7 @@ namespace ns3
     SystemMutex m_mutexDatabase;
     std::map<Ptr<EndpointId>, Ptr<MapEntry>, CompareEndpointId> m_mappingCache;
     std::map<Ptr<EndpointId>, Ptr<MapEntry>, CompareEndpointId> m_mappingDatabase;
-//    Ptr<LispEtrItrApplication> m_xTRApp;
+    Ptr<LispEtrItrApplication> m_xTRApp;
 
 
 

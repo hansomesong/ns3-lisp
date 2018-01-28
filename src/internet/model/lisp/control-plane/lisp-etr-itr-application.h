@@ -63,6 +63,7 @@ public:
   std::list<Ptr<Locator> > GetMapResolverRLocs (Ptr<Locator> locator);
   static const uint8_t MAX_REQUEST_NB; //!< maximum number of requests pending in list
 
+  std::list<Ptr<MapRequestMsg>> GetMapRequestMsgList();
 
 
 
