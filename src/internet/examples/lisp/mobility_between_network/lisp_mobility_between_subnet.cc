@@ -571,15 +571,15 @@ main (int argc, char *argv[])
 //      LogComponentEnable ("UdpEchoClientApplication", LOG_LEVEL_INFO);
 //      LogComponentEnable ("UdpEchoServerApplication", LOG_LEVEL_INFO);
 //      LogComponentEnable ("OnOffApplication", LOG_LEVEL_INFO);
-      LogComponentEnable ("DhcpClient", LOG_LEVEL_ALL);
-      LogComponentEnable ("DhcpClient", LOG_PREFIX_ALL);
-      LogComponentEnable ("DhcpServer", LOG_LEVEL_ALL);
-      LogComponentEnable ("DhcpServer", LOG_PREFIX_ALL);
+//      LogComponentEnable ("DhcpClient", LOG_LEVEL_ALL);
+//      LogComponentEnable ("DhcpClient", LOG_PREFIX_ALL);
+//      LogComponentEnable ("DhcpServer", LOG_LEVEL_ALL);
+//      LogComponentEnable ("DhcpServer", LOG_PREFIX_ALL);
 //      LogComponentEnable("SimpleMapTables", LOG_LEVEL_DEBUG);
 
       //For LispOverIp
-      LogComponentEnable ("Ipv4StaticRouting", LOG_LEVEL_DEBUG);
-      LogComponentEnable ("Ipv4StaticRouting", LOG_PREFIX_ALL);
+//      LogComponentEnable ("Ipv4StaticRouting", LOG_LEVEL_DEBUG);
+//      LogComponentEnable ("Ipv4StaticRouting", LOG_PREFIX_ALL);
 
 //      LogComponentEnable ("VirtualNetDevice", LOG_LEVEL_DEBUG);
 //      LogComponentEnable ("VirtualNetDevice", LOG_PREFIX_ALL);
@@ -591,25 +591,27 @@ main (int argc, char *argv[])
 //	LogComponentEnable ("StaWifiMac", LOG_PREFIX_ALL);
 
       //For LispOverIp
-//      LogComponentEnable ("LispOverIp", LOG_LEVEL_ALL);
-//      LogComponentEnable ("LispOverIp", LOG_PREFIX_ALL);
-//      LogComponentEnable ("LispOverIpv4Impl", LOG_LEVEL_ALL);
-//      LogComponentEnable ("LispOverIpv4Impl", LOG_PREFIX_ALL);
+      LogComponentEnable ("LispOverIp", LOG_LEVEL_ALL);
+      LogComponentEnable ("LispOverIp", LOG_PREFIX_ALL);
+      LogComponentEnable ("LispOverIpv4Impl", LOG_LEVEL_ALL);
+      LogComponentEnable ("LispOverIpv4Impl", LOG_PREFIX_ALL);
       //For LispEtrItrApplication
       LogComponentEnable ("LispEtrItrApplication", LOG_LEVEL_ALL);
       LogComponentEnable ("LispEtrItrApplication", LOG_PREFIX_ALL);
+      LogComponentEnable ("LispEtrItrAppHelper", LOG_LEVEL_ALL);
+      LogComponentEnable ("LispEtrItrAppHelper", LOG_PREFIX_ALL);
 
-      LogComponentEnable ("MapServerDdt", LOG_LEVEL_ALL);
-      LogComponentEnable ("MapServerDdt", LOG_PREFIX_ALL);
+//      LogComponentEnable ("MapServerDdt", LOG_LEVEL_ALL);
+//      LogComponentEnable ("MapServerDdt", LOG_PREFIX_ALL);
 
-      LogComponentEnable ("SimpleMapTables", LOG_LEVEL_ALL);
-      LogComponentEnable ("SimpleMapTables", LOG_PREFIX_ALL);
+//      LogComponentEnable ("SimpleMapTables", LOG_LEVEL_ALL);
+//      LogComponentEnable ("SimpleMapTables", LOG_PREFIX_ALL);
 
 //      LogComponentEnable ("Ipv4RawSocketImpl", LOG_LEVEL_ALL);
 //      LogComponentEnable ("Ipv4RawSocketImpl", LOG_PREFIX_ALL);
 //
-//      LogComponentEnable ("Ipv4L3Protocol", LOG_LEVEL_ALL);
-//      LogComponentEnable ("Ipv4L3Protocol", LOG_PREFIX_ALL);
+      LogComponentEnable ("Ipv4L3Protocol", LOG_LEVEL_ALL);
+      LogComponentEnable ("Ipv4L3Protocol", LOG_PREFIX_ALL);
 
 
 

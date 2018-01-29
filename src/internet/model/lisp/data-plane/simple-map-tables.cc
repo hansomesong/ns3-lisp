@@ -165,6 +165,7 @@ void SimpleMapTables::SetxTRApp(Ptr<LispEtrItrApplication> xTRApp){
 // Set an ipv4 eid
 void SimpleMapTables::SetEntry(const Address &eidAddress, const Ipv4Mask &mask,
 		Ptr<MapEntry> mapEntry, MapEntryLocation location) {
+	//Note that this method is only valid for Ipv4Address
 	NS_ASSERT(Ipv4Address::IsMatchingType(eidAddress));
 	Ptr<EndpointId> eid = Create<EndpointId>();
 
@@ -209,18 +210,35 @@ void SimpleMapTables::SetEntry(const Address &eidAddress, const Ipv4Mask &mask,
 				std::pair<Ptr<EndpointId>, Ptr<MapEntry> >(eid, mapEntry));
 		m_mutexCache.Unlock();
 		NS_LOG_DEBUG("Set an Mapping Entry for EID:"<<eid->GetEidAddress());
-		//TODO: Here we should care about whether we could send the saved invoked-SMR
-		// if ...
-		std::list<Ptr<MapRequestMsg>> m_mapReqMsg = GetxTRApp()->GetMapRequestMsgList();
-		for(std::list<Ptr<MapRequestMsg>>::const_iterator it = m_mapReqMsg.begin(); it!=m_mapReqMsg.end();++it){
-			// it here is a pointer of pointer??
-			Ptr<MapRequestMsg> requestMsg = (*it);
-			if (eidAddress == requestMsg->GetItrRlocAddrIp()){
-				GetxTRApp()->SendInvokedSmrMsg(requestMsg);
-				NS_LOG_DEBUG("Now a buffered invoked-SMR has been sent... ");
-				//Don't forget to delete the sent invoked-SMR
-				m_mapReqMsg.remove(*it);
+		/**
+		 * TODO: Here we should care about whether we could send the saved invoked-SMR.
+		 * First thing: not all simple map table should have a pointer to xTR application.
+		 * SimpleMapTables class in MapServer has no such a pointer.
+		 * Thus, we first need to make sure whether the xTR smart pointer's value is 0.
+		 * If yes. bypass all the following logics.
+		 */
+		NS_LOG_DEBUG("xTR application pointer of this map table is :"<<m_xTRApp);
+		if (m_xTRApp != NULL){
+			std::list<Ptr<MapRequestMsg>> m_mapReqMsg = m_xTRApp->GetMapRequestMsgList();
+			Ipv4Address eidAddressIpv4 = Ipv4Address::ConvertFrom(eidAddress);
+			NS_LOG_DEBUG("The newly received mapping has an EID:"<<eidAddressIpv4);
+			for(std::list<Ptr<MapRequestMsg>>::const_iterator it = m_mapReqMsg.begin(); it!=m_mapReqMsg.end();++it){
+				// it here is a pointer of pointer??
+				Ptr<MapRequestMsg> requestMsg = (*it);
+				Ipv4Address queriedEid = Ipv4Address::ConvertFrom(requestMsg->GetItrRlocAddrIp());
+				Ipv4Address queriedEidPrefix = queriedEid.CombineMask(mask);
+				NS_LOG_DEBUG("The buffered SMR contains an unknown RLOC (i.e. a Local RLOC, an EID):"<<Ipv4Address::ConvertFrom (queriedEid));
+				// Should verify if queriedEid belongs to eidAddress (which is a prefix)
+				if (eidAddressIpv4.IsEqual(queriedEidPrefix)){
+					GetxTRApp()->SendInvokedSmrMsg(requestMsg);
+					NS_LOG_DEBUG("Now a buffered invoked-SMR has been sent... ");
+					//Don't forget to delete the sent invoked-SMR
+//					m_mapReqMsg.remove(*it);
+				}
 			}
+		}
+		else{
+			NS_LOG_DEBUG("This map table is not managed by any xTR application");
 		}
 	}
 }

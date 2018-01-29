@@ -499,9 +499,12 @@ void LispEtrItrApplication::SendInvokedSmrMsg(Ptr<MapRequestMsg> smr) {
 	 * Determine the dst@IP of this sending: the RLOC of xTR sending SMR
 	 * This @IP is in the received SMR
 	 */
-	if (smr->GetItrRlocAddrIp() != static_cast<Address>(Ipv4Address()))
+	if (smr->GetItrRlocAddrIp() != static_cast<Address>(Ipv4Address())){
 		MapResolver::ConnectToPeerAddress(smr->GetItrRlocAddrIp(), m_peerPort,
 				m_socket);
+		NS_LOG_DEBUG("Now the socket has been binded to:"<<Ipv4Address::ConvertFrom(smr->GetItrRlocAddrIp()));
+	}
+
 	else if ((smr->GetItrRlocAddrIpv6() != static_cast<Address>(Ipv6Address())))
 		MapResolver::ConnectToPeerAddress(smr->GetItrRlocAddrIpv6(), m_peerPort,
 				m_socket);
@@ -512,14 +515,13 @@ void LispEtrItrApplication::SendInvokedSmrMsg(Ptr<MapRequestMsg> smr) {
 	uint8_t newBuf[256];
 	//TODO: verify if we can directly copy map request message as SMR-invoked map request
 	// We just need to change SMR-invoked bit as 1 and change the source ITR's address
-//		Ptr<MapRequestMsg> mapReqMsg =
-//		    LispEtrItrApplication::GenerateMapRequest ();
 	//TODO: now I'm lost about defintion of m_mapResolverRlocs...
 	smr->SetS2(1);
 	Address itrAddress = GetLocalAddress(
 			m_mapResolverRlocs.front()->GetRlocAddress());
 	if (Ipv4Address::IsMatchingType(itrAddress)) {
 		smr->SetItrRlocAddrIp(itrAddress);
+		NS_LOG_DEBUG("Invoked-SMR's source RLOC field has been set as:"<<Ipv4Address::ConvertFrom(itrAddress));
 	} else {
 		smr->SetItrRlocAddrIpv6(itrAddress);
 	}
@@ -540,7 +542,7 @@ void LispEtrItrApplication::SendInvokedSmrMsg(Ptr<MapRequestMsg> smr) {
 
 	Send(reactedPacket);
 	NS_LOG_DEBUG(
-			"Invoked Map Request Message Sent to " << Ipv4Address::ConvertFrom (m_mapResolverRlocs.front()->GetRlocAddress ()));
+			"Invoked Map Request Message Sent to " << Ipv4Address::ConvertFrom (itrAddress));
 
 }
 
