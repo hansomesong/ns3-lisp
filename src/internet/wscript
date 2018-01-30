@@ -242,7 +242,8 @@ def build(bld):
         'model/lisp/data-plane/rloc-metrics.cc',
         'model/lisp/data-plane/endpoint-id.cc',
         'model/lisp/data-plane/lisp-packet-buffer.cc',
-        'model/lisp/data-plane/lisp-packet-buffer-impl.cc',        
+        'model/lisp/data-plane/lisp-packet-buffer-impl.cc',
+        'model/lisp/data-plane/tun-net-device.cc',             
         # lisp control plane
         'model/lisp/control-plane/map-resolver.cc',
         'model/lisp/control-plane/lisp-etr-itr-application.cc',
@@ -455,6 +456,7 @@ def build(bld):
         'model/lisp/data-plane/endpoint-id.h',
         'model/lisp/data-plane/lisp-packet-buffer.h',
         'model/lisp/data-plane/lisp-packet-buffer-impl.h',
+        'model/lisp/data-plane/tun-net-device.h',   
         # lisp control plane
         'model/lisp/control-plane/map-resolver.h',
         'model/lisp/control-plane/lisp-etr-itr-application.h',
